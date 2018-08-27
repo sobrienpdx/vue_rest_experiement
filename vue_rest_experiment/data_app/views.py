@@ -10,7 +10,7 @@ class ImageViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Image instances to be viewed or edited.
     """
-    queryset = Image.objects.all().order_by('-date_joined')
+    queryset = Image.objects.all() #removed the .order_by()
     serializer_class = ImageSerializer
 
 

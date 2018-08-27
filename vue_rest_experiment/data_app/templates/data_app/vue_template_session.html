@@ -1,0 +1,60 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Session</title>
+
+
+    <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-resource@1.5.1/dist/vue-resource.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+  </head>
+
+
+	<body>
+	  <div id="cardSet">
+			<ul
+			v-for="(x, index) in test"
+			>
+				<li>
+					${x.text}
+				</li>
+			</ul>
+
+<p>sets is:</p>${sets}
+<p>sets[0] returns url then cards:</p>${sets[0]}
+<p>sets[0].cards retruns url, images, text for all cards:</p>${sets[0].cards}
+<p>sets[0].cards[0] url, images, text for one card:</p>${sets[0].cards[0]}
+<p>sets[0].cards[0].images[0].image one image for one card:</p>
+<img v-bind:src='sets[0].cards[0].images[0].image' />
+
+	${sets[0].cards[0].images[0].image}
+<p>sets[0].cards[0].text returns text for the aforementioned card:</p>${sets[0].cards[0].text}
+<p>...</p>
+			<template
+			v-for="(cards, index) in sets[0]"
+			>
+				<template
+				v-for='(card, index) in cards'
+				>
+					${card.text}
+					<p
+						v-for='(images, index) in card'
+						>
+						${image}
+
+
+					</p>
+				</template>
+			</template>
+
+
+	  </div>
+
+	<script src="{% static 'data_app/script.js' %}"></script>
+	</body>
