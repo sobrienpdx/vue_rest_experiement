@@ -1,0 +1,17 @@
+* {
+	color: green;
+}
+
+.single_card {
+	border: solid 3px blue;
+	background-color: lightblue;
+}
+img {
+	width: 50px;
+}
+
+.target_card {
+	width: 100%;
+	border: solid 3px blue;
+	background-color: lightblue;
+}

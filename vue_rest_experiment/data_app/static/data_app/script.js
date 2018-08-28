@@ -11,11 +11,15 @@ var app = new Vue({
     data: {
         heading: 'Set Name or Student?',
 				target_set: 0, //the user will enter this. currently the text data only has 1 set
-				cards: [], // this should populate with a list of dictionaries containing all the info to build the cards. OJO! there may be multiple images at some
+				// cards: [], // this should populate with a list of dictionaries containing all the info to build the cards. OJO! there may be multiple images at some
 				test: [
 					{'text':'hello?'},
 					{'text':'is anyone there?'}],
 				sets: [],
+				card_number: 0,
+				score: 100,
+				correcty: 0,
+				incorrecty: 0,
 
 
     },
@@ -41,12 +45,61 @@ var app = new Vue({
 									console.log(err);
 							});
 			},
+
+			next: function() {
+				this.card_number += 1
+				console.log(this.card_number)
+			},
+			printNewScore: function() {
+				console.log('you called update score')
+				this.score = Math.round((this.correcty/(this.correcty + this.incorrecty))*100)
+
+				console.log(this.correcty)
+				// this.$http.get('scores/', 'score')
+				// 	.then((response) => {
+				// 			this.score=score
+				// 	})
+				// 	.catch((err) => {
+				// 			console.log(err);
+				// 	});
+			},
+
+
+			scoreCorrect: function(id) {
+				console.log("you called correct")
+				this.correcty +=1
+				this.$http.patch(`scores/${id}/`, {'correct': this.correcty})
+						.then((response) => {
+								console.log(response.body)
+								let scorey = response.body
+								console.log(scorey.correct)
+						})
+						this.printNewScore()
+			},
+
+			scoreIncorrect: function(id) {
+				console.log("you called incorrect")
+				this.incorrecty +=1
+				this.$http.patch(`scores/${id}/`, {'incorrect': this.incorrecty})
+						.then((response) => {
+								console.log(response.body)
+								let scorey = response.body
+								console.log(scorey.incorrect)
+						})
+						this.printNewScore()
+			},
+
+
 			sayHi: function() {
 				console.log("hello!")
 			},
+
+
+
+
 		},
 		mounted: function() {
-			this.sayHi();
+			// this.sayHi();
 			this.getCards();
 		},
 });

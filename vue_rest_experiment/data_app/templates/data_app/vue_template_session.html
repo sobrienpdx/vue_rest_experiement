@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Session</title>
 
-
+  	<link rel="stylesheet" href="{% static 'data_app/style.css' %}">
     <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
     <script src="https://unpkg.com/vue-resource@1.5.1/dist/vue-resource.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
@@ -36,25 +36,40 @@
 	${sets[0].cards[0].images[0].image}
 <p>sets[0].cards[0].text returns text for the aforementioned card:</p>${sets[0].cards[0].text}
 <p>...</p>
-			<template
-			v-for="(cards, index) in sets[0]"
-			>
+			<template v-if='sets[0].cards'>
 				<template
-				v-for='(card, index) in cards'
+				class="single_card"
+				v-for='(card, index) in sets[0].cards'
 				>
+				<div class="single_card">
 					${card.text}
 					<p
-						v-for='(images, index) in card'
+						v-for='(image_dictionary, index) in card.images'
 						>
-						${image}
-
-
+						${image_dictionary.image}
+						<img v-bind:src='image_dictionary.image' />
 					</p>
+				</div>
 				</template>
 			</template>
 
 
-	  </div>
+<p>One Card at a Time:</p>
+${score}
+	<div class="target_card">
+		<div v-for='(image_dictionary, index) in sets[0].cards[card_number].images'>
+			<img v-bind:src='image_dictionary.image' />
+			${sets[0].cards[card_number].text}
+		</div>
+		<button v-on:click="next">Next</button>
+		<button v-on:click="scoreCorrect(1)">+</button>
+		<button v-on:click="scoreIncorrect(1)">-</button>
+
+
+	</div>
+
+
+
 
 	<script src="{% static 'data_app/script.js' %}"></script>
 	</body>
