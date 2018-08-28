@@ -17,7 +17,8 @@ var app = new Vue({
 					{'text':'is anyone there?'}],
 				sets: [],
 				card_number: 0,
-				score: 100,
+				score: 0,
+				score_api: [],
 				correcty: 0,
 				incorrecty: 0,
 
@@ -25,7 +26,7 @@ var app = new Vue({
     },
     methods: {
 			getCards: function() {
-				console.log('you called getCards')
+				// console.log('you called getCards')
 					this.$http.get('sets/')
 							.then((response) => {
 									// console.log(response.body)
@@ -34,12 +35,12 @@ var app = new Vue({
 										for (let j=0; j<this.sets[i].cards.length; j++){
 										// this.cards.push(this.sets[i]['cards']['text'])
 										// console.log(this.sets[i]['cards']['text'])
-										console.log(this.sets[i].cards[j].text)
+										// console.log(this.sets[i].cards[j].text)
 										}
 										// set = this.sets[i]
 										// console.log(this.cards)
 									}
-								  console.log(this.sets)
+								  // console.log(this.sets)
 							})
 							.catch((err) => {
 									console.log(err);
@@ -53,38 +54,45 @@ var app = new Vue({
 			printNewScore: function() {
 				console.log('you called update score')
 				this.score = Math.round((this.correcty/(this.correcty + this.incorrecty))*100)
-
-				console.log(this.correcty)
-				// this.$http.get('scores/', 'score')
-				// 	.then((response) => {
-				// 			this.score=score
-				// 	})
-				// 	.catch((err) => {
-				// 			console.log(err);
-				// 	});
 			},
 
 
 			scoreCorrect: function(id) {
-				console.log("you called correct")
 				this.correcty +=1
 				this.$http.patch(`scores/${id}/`, {'correct': this.correcty})
 						.then((response) => {
-								console.log(response.body)
+								// console.log(response.body)
 								let scorey = response.body
-								console.log(scorey.correct)
+								// console.log(scorey.correct)
 						})
 						this.printNewScore()
 			},
 
+			populateScore: function(id) {
+				console.log("you called populateScore")
+				this.$http.get(`scores/${id}/`)
+					.then((response) => {
+					this.score_api = response.body;
+					this.score = Math.round((this.score_api.correct/(this.score_api.correct + this.score_api.incorrect))*100)
+					this.correcty = this.score_api.correct
+					this.incorrecty = this.score_api.incorrect
+					console.log(this.score)
+					})
+					.catch((err) => {
+						console.log(err);
+					});
+
+			},
+
+
 			scoreIncorrect: function(id) {
-				console.log("you called incorrect")
+				// console.log("you called incorrect")
 				this.incorrecty +=1
 				this.$http.patch(`scores/${id}/`, {'incorrect': this.incorrecty})
 						.then((response) => {
-								console.log(response.body)
+								// console.log(response.body)
 								let scorey = response.body
-								console.log(scorey.incorrect)
+								// console.log(scorey.incorrect)
 						})
 						this.printNewScore()
 			},
@@ -101,5 +109,6 @@ var app = new Vue({
 		mounted: function() {
 			// this.sayHi();
 			this.getCards();
+			this.populateScore(1);
 		},
 });
